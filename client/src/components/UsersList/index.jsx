@@ -1,17 +1,14 @@
 import { connect } from "react-redux";
 import BeatLoader from "react-spinners/BeatLoader";
-//import styles from './UsersList.module.sass';
-//import defImage from './defaultPhoto.jpg';
-import { useEffect, useState } from "react";
+import styles from "./UsersList.module.sass";
+import defImage from "./defaultPhoto.jpg";
+import { useEffect } from "react";
+import { getUserThunk } from "../../store/slices/usersSlice";
 
-export const UsersList = ({ isFetching, error }) => {
-  const [users, setUsers] = useState([]);
+export const UsersList = ({ users, isFetching, error, getUsers }) => {
   useEffect(() => {
-    fetch("http://localhost:5000/api/users")
-      .then((response) => response.json())
-      .then(data => setUsers(data.data))
-      .catch((error) => console.log(error));
-  });
+    getUsers();
+  }, []);
 
   return (
     <>
@@ -19,7 +16,16 @@ export const UsersList = ({ isFetching, error }) => {
       {error && <div>!!!ERROR!!!</div>}
       <ul>
         {users.map((u) => (
-          <li key={u.id}>{JSON.stringify(u)}</li>
+          <li key={u.id}>
+            <image
+              className={styles.userImage}
+              src={
+                u.image ? `http://localhost:5000/images/${u.image}` : defImage
+              }
+              alt={`${u.firstName} ${u.lastName}`}
+            />
+            {JSON.stringify(u)}
+          </li>
         ))}
       </ul>
     </>
@@ -28,6 +34,8 @@ export const UsersList = ({ isFetching, error }) => {
 
 const mapStateToProps = ({ usersData }) => usersData;
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  getUsers: () => dispatch(getUserThunk()),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(UsersList);

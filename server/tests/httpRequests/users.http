@@ -2,14 +2,22 @@ POST http://localhost:5000/api/users
 Content-Type: application/json
 
 {
-  "firstName":"Jane",
+  "firstName": "Jane",
   "lastName": "Dou",
-  "email":"m8@m.com",
-  "passwHash": "123",
-  "birthday":"1990-12-01",
-  "gender":"female",
-
+  "email": "mmm44@m.com",
+  "passwordHush": "1234",
+  "birthday": "1990-12-01",
+  "gender": "female"
 }
+
+# {
+#   "firstName":"Jane",
+#   "lastName": "Dou",
+#   "email":"mmm44@m.com",
+#   "passwordHush": "1234",
+#   "birthday":"1990-12-01",
+#   "gender":"female"
+# }
 
 ###
 

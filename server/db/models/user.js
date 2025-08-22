@@ -6,7 +6,7 @@ const { GENDERS } = require('./../../constants');
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    static associate (models) {
+    static associate(models) {
       User.hasMany(models.Task, {
         foreignKey: {
           name: 'userId',
@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       firstName: {
         type: DataTypes.STRING(64),
         allowNull: false,
+        field: 'first_name',
         validate: {
           is: /^[A-Z][a-z]+$/,
           len: [2, 64],
@@ -29,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       lastName: {
         type: DataTypes.STRING(64),
+        field: 'last_name',
         validate: {
           is: /^[A-Z][a-z]+$/,
           len: [2, 64],
@@ -40,12 +42,13 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: { isEmail: true },
       },
-      passwHash: {
+      passwordHush: {
         type: DataTypes.STRING,
         allowNull: false,
-        set (value) {
+        field: 'password_hush',
+        set(value) {
           this.setDataValue(
-            'passwHash',
+            'passwordHush', // ім’я поля моделі
             hashSync(value, Number(process.env.HASH_SALT))
           );
         },

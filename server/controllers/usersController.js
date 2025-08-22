@@ -15,12 +15,12 @@ module.exports.createUser = async (req, res, next) => {
     // видалити всі непотрібні або сек'юрні властивості
 
     // const preparedUser = { ...createdUser.get() };
-    // delete preparedUser.passwHash;
+    // delete preparedUser.passwordHush;
     // delete preparedUser.createdAt;
     // delete preparedUser.updatedAt;
 
     const preparedUser = _.omit(createdUser.get(), [
-      'passwHash',
+      'passwordHush',
       'createdAt',
       'updatedAt',
     ]);
@@ -37,7 +37,7 @@ module.exports.getUsers = async (req, res, next) => {
   try {
     const foundUsers = await User.findAll({
       raw: true,
-      attributes: { exclude: ['passwHash', 'createdAt', 'updatedAt'] },
+      attributes: { exclude: ['passwordHush', 'createdAt', 'updatedAt'] },
       limit,
       offset,
       order: ['id'],
@@ -60,7 +60,7 @@ module.exports.getUserById = async (req, res, next) => {
   try {
     const foundUser = await User.findByPk(id, {
       raw: true,
-      attributes: { exclude: ['passwHash', 'createdAt', 'updatedAt'] },
+      attributes: { exclude: ['passwordHush', 'createdAt', 'updatedAt'] },
     });
 
     if (!foundUser) {
@@ -91,7 +91,7 @@ module.exports.updateUserById = async (req, res, next) => {
     }
 
     const preparedUser = _.omit(updatedUser, [
-      'passwHash',
+      'passwordHush',
       'createdAt',
       'updatedAt',
     ]);
@@ -130,7 +130,7 @@ module.exports.updateOrCreateUser = async (req, res, next) => {
     }
 
     const preparedUser = _.omit(updatedUser, [
-      'passwHash',
+      'passwordHush',
       'createdAt',
       'updatedAt',
     ]);
@@ -200,7 +200,7 @@ module.exports.updateUserImage = async (req, res, next) => {
     }
 
     const preparedUser = _.omit(updatedUser, [
-      'passwHash',
+      'passwordHush',
       'createdAt',
       'updatedAt',
     ]);
