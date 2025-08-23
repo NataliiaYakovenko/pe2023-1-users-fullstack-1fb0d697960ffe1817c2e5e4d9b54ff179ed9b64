@@ -3,9 +3,12 @@ const { User } = require('../db/models');
 const createHttpError = require('http-errors');
 
 module.exports.createUser = async (req, res, next) => {
-  const { body } = req;
+  const { body, file } = req;
 
   try {
+    if (file) {
+      body.image = file.filename;
+    }
     const createdUser = await User.create(body);
 
     if (!createdUser) {
