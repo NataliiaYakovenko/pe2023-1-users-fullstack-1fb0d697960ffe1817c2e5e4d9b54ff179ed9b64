@@ -9,17 +9,30 @@ const initialState = {
   error: null,
 };
 
-
-
 export const getUserThunk = createAsyncThunk(
   `${USERS_SLICE_NAME}/get`,
-  async (payload, {rejectWithValue}) => {
+  async (payload, { rejectWithValue }) => {
     try {
-      const {data:{data}} = await API.getUsers();
+      const {
+        data: { data },
+      } = await API.getUsers();
       return data;
     } catch (error) {
       console.log(error);
-      return rejectWithValue();
+      return rejectWithValue({ errors: error.response.data });
+    }
+  }
+);
+
+export const deleteUserThunk = createAsyncThunk(
+  `${USERS_SLICE_NAME}/delete`,
+  async (payload, { rejectWithValue }) => {
+    try {
+      await API.deleteUser(payload); // id
+      return payload;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue({ errors: error.response.data });
     }
   }
 );
@@ -27,7 +40,9 @@ export const getUserThunk = createAsyncThunk(
 const usersSlice = createSlice({
   name: USERS_SLICE_NAME,
   initialState,
+
   extraReducers: (builder) => {
+    //get
     builder.addCase(getUserThunk.pending, (state) => {
       state.isFetching = true;
       state.error = null;
@@ -37,6 +52,20 @@ const usersSlice = createSlice({
       state.isFetching = false;
     });
     builder.addCase(getUserThunk.rejected, (state, { payload }) => {
+      state.error = payload;
+      state.isFetching = false;
+    });
+
+    //delete
+    builder.addCase(deleteUserThunk.pending, (state) => {
+      state.isFetching = true;
+      state.error = null;
+    });
+    builder.addCase(deleteUserThunk.fulfilled, (state, { payload }) => {
+      state.isFetching = false;
+      state.users = state.users.filter((u) => u.id !== payload);
+    });
+    builder.addCase(deleteUserThunk.rejected, (state, { payload }) => {
       state.error = payload;
       state.isFetching = false;
     });
